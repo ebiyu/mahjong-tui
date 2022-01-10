@@ -8,10 +8,6 @@ import (
 	"github.com/ebiyuu1121/tui-test/ui/kawaUI"
 )
 
-func haipai() []string {
-	return []string{"1m", "1m", "1m", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "9m", "9m", "1p"}
-}
-
 const (
 	JICHA    = 0
 	SHIMOCHA = 1
@@ -43,7 +39,33 @@ func main() {
 			kawaUIList[i].Update(game.Kawa()[i])
 		}
 		for i := 0; i < 14; i++ {
-			buttons[i].SetLabel(game.Tehai()[JICHA][i])
+			pai := game.Tehai()[JICHA][i]
+			switch pai {
+			case "1z":
+				buttons[i].SetLabel("東")
+			case "2z":
+				buttons[i].SetLabel("南")
+			case "3z":
+				buttons[i].SetLabel("西")
+			case "4z":
+				buttons[i].SetLabel("北")
+			case "5z":
+				buttons[i].SetLabel("")
+			case "6z":
+				buttons[i].SetLabel("發")
+			case "7z":
+				buttons[i].SetLabel("中")
+			default:
+				buttons[i].SetLabel(pai)
+			}
+			switch pai[1] {
+			case 'm':
+				buttons[i].SetLabelColor(tcell.ColorPink)
+			case 'p':
+				buttons[i].SetLabelColor(tcell.ColorLightCyan)
+			case 's':
+				buttons[i].SetLabelColor(tcell.ColorLightGreen)
+			}
 		}
 	}
 	update()
@@ -102,7 +124,7 @@ func main() {
 	flex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(tview.NewBox(), 1, 1, false).
 		AddItem(kawa, 0, 9, false).
-		AddItem(bottom, 1, 1, false)
+		AddItem(bottom, 3, 1, false)
 
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
