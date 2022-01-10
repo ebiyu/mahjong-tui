@@ -19,14 +19,9 @@ type Game struct {
 
 func Init() *Game {
 	game := &Game{
-		yama:  generateYama(),
-		tehai: [4][]string{{}, {}, {}, {}},
-		kawa: [4][]string{
-			{"1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"},
-			{"1m", "2m", "3m", "4m", "5m", "6m", "7m", "8m"},
-			{"1s", "2s", "3s", "4s", "5s", "6s", "7s", "8s"},
-			{"1z", "1z", "2z", "2z", "3z", "3z", "4z", "5z"},
-		},
+		yama:      generateYama(),
+		tehai:     [4][]string{{}, {}, {}, {}},
+		kawa:      [4][]string{{}, {}, {}, {}},
 		point:     [4]int{25000, 25000, 25000, 25000},
 		kyokuKaze: 0,
 		kyokuNum:  1,
@@ -35,7 +30,7 @@ func Init() *Game {
 	}
 
 	chicha := 0
-	game.haipy().ripai(chicha).tsumo(chicha)
+	game.haipy().Ripai(chicha).Tsumo(chicha)
 
 	return game
 }
@@ -48,8 +43,20 @@ func (game *Game) Kawa() [4][]string {
 	return game.kawa
 }
 
-func (game *Game) Kill(player int, pieIndex int) {
+func (game *Game) YamaLength() int {
+	return len(game.yama) - 4 - 10
+}
+
+func (game *Game) Kill(player int, pieIndex int) *Game {
+	if len(game.tehai[player]) != 14 {
+		return game
+	}
+
 	game.kawa[player] = append(game.kawa[player], game.tehai[player][pieIndex])
+	game.tehai[player][pieIndex] = game.tehai[player][13]
+	game.tehai[player] = game.tehai[player][:13]
+
+	return game
 }
 
 func generateYama() []string {
@@ -98,20 +105,24 @@ func generateYama() []string {
 func (game *Game) haipy() *Game {
 	for player := 0; player < 4; player++ {
 		for i := 0; i < 13; i++ {
-			game.tsumo(player)
+			game.Tsumo(player)
 		}
 	}
 	return game
 }
 
-func (game *Game) tsumo(player int) *Game {
+func (game *Game) Tsumo(player int) *Game {
+	if game.YamaLength() <= 0 {
+		return game
+	}
+
 	pai := game.yama[0]
 	game.tehai[player] = append(game.tehai[player], pai)
 	game.yama = game.yama[1:]
 	return game
 }
 
-func (game *Game) ripai(player int) *Game {
+func (game *Game) Ripai(player int) *Game {
 	pai := game.tehai[player]
 	game.tehai[player] = sortPai(pai)
 	return game

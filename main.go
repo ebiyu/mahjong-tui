@@ -24,7 +24,7 @@ func main() {
 	game := game.Init()
 
 	// ui
-	buttons := []tview.Primitive{}
+	buttons := []*tview.Button{}
 	for i := 0; i < 14; i++ {
 		buttons = append(buttons, tview.NewButton(game.Tehai()[JICHA][i]))
 	}
@@ -41,6 +41,9 @@ func main() {
 	update := func() {
 		for i := 0; i < 4; i++ {
 			kawaUIList[i].Update(game.Kawa()[i])
+		}
+		for i := 0; i < 14; i++ {
+			buttons[i].SetLabel(game.Tehai()[JICHA][i])
 		}
 	}
 	update()
@@ -103,6 +106,9 @@ func main() {
 
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
+		case tcell.KeyEnter:
+			game.Kill(JICHA, 13).Ripai(JICHA).Tsumo(JICHA)
+			update()
 		case tcell.KeyRune:
 			switch event.Rune() {
 			case 'q':
@@ -119,7 +125,7 @@ func main() {
 				}
 				app.SetFocus(buttons[activePie])
 			case ' ':
-				game.Kill(JICHA, activePie)
+				game.Kill(JICHA, activePie).Ripai(JICHA).Tsumo(JICHA)
 				update()
 			}
 		}
