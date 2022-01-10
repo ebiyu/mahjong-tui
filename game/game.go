@@ -113,21 +113,35 @@ func (game *Game) tsumo(player int) *Game {
 
 func (game *Game) ripai(player int) *Game {
 	pai := game.tehai[player]
+	game.tehai[player] = sortPai(pai)
+	return game
+}
+
+func sortPai(pai []string) []string {
 	sort.Slice(pai, func(i int, j int) bool {
 		if pai[i][1] < pai[j][1] {
 			return true
 		} else if pai[i][1] == pai[j][1] {
+			l := pai[i][0]
+			r := pai[j][0]
 			// 0p == r5p
-			if pai[i][0] == '0' {
-				return '5' < pai[j][0]
-			} else if pai[j][0] == '0' {
-				return pai[i][0] < '5'
+			if l == '0' {
+				if r == '5' {
+					// "r5 < 5" is false bacause 5 < r5
+					return false
+				}
+				return '5' < r
+			} else if r == '0' {
+				if l == '5' {
+					// "5 < r5" is true bacause 5 < r5
+					return true
+				}
+				return l < '5'
 			} else {
-				return pai[i][0] < pai[j][0]
+				return l < r
 			}
 		}
 		return false
 	})
-	game.tehai[player] = pai
-	return game
+	return pai
 }
