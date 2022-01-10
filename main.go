@@ -4,6 +4,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 
+	"github.com/ebiyuu1121/tui-test/game"
 	"github.com/ebiyuu1121/tui-test/ui/kawaUI"
 )
 
@@ -20,13 +21,12 @@ const (
 
 func main() {
 	app := tview.NewApplication()
-
-	pies := haipai()
+	game := game.Init()
 
 	// ui
 	buttons := []tview.Primitive{}
 	for i := 0; i < 14; i++ {
-		buttons = append(buttons, tview.NewButton(pies[i]))
+		buttons = append(buttons, tview.NewButton(game.Tehai()[JICHA][i]))
 	}
 
 	// kawa
@@ -37,11 +37,13 @@ func main() {
 		KAMICHA:  kawaUI.Init(KAMICHA),
 	}
 
-	// kawa test data
-	kawaUIList[JICHA].Update([]string{"1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"})
-	kawaUIList[SHIMOCHA].Update([]string{"1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"})
-	kawaUIList[TOIMEN].Update([]string{"1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"})
-	kawaUIList[KAMICHA].Update([]string{"1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"})
+	// update kawa
+	update := func() {
+		for i := 0; i < 4; i++ {
+			kawaUIList[i].Update(game.Kawa()[i])
+		}
+	}
+	update()
 
 	activePie := 0
 	buttonFlex := tview.NewFlex()
@@ -116,6 +118,9 @@ func main() {
 					activePie += 1
 				}
 				app.SetFocus(buttons[activePie])
+			case ' ':
+				game.Kill(JICHA, activePie)
+				update()
 			}
 		}
 		return event
