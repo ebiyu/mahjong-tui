@@ -1,4 +1,4 @@
-module github.com/ebiyuu1121/tui-test
+module github.com/ebiyuu1121/mahjong-tui
 
 go 1.17
 

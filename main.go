@@ -4,8 +4,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 
-	"github.com/ebiyuu1121/tui-test/game"
-	"github.com/ebiyuu1121/tui-test/ui/kawaUI"
+	"github.com/ebiyuu1121/mahjong-tui/game"
+	"github.com/ebiyuu1121/mahjong-tui/ui/kawaUI"
 )
 
 const (
