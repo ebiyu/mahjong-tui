@@ -20,6 +20,11 @@ This app is under development
 - calculate points
 - other player (COMS)
 
+## Requirements
+
+- git
+- golang
+
 ## Installation
 
 ```sh
