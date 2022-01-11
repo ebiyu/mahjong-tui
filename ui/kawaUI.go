@@ -1,9 +1,7 @@
-package kawaUI
+package ui
 
 import (
 	"github.com/rivo/tview"
-
-	"github.com/ebiyuu1121/mahjong-tui/ui/tile"
 )
 
 const (
@@ -18,7 +16,7 @@ type KawaUI struct {
 	direction int // 0: jicha, 1: shimocha, 2: toimen, 3: shimocha
 }
 
-func Init(direction int) KawaUI {
+func NewKawaUI(direction int) KawaUI {
 	kawa := KawaUI{direction: direction}
 	switch kawa.direction {
 	case JICHA, TOIMEN:
@@ -34,13 +32,13 @@ func (kawa KawaUI) SetTiles(tiles []string) {
 	for i, v := range tiles {
 		switch kawa.direction {
 		case JICHA:
-			kawa.Grid.AddItem(tile.Init(v).UI(), i/6, i%6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(NewUITile(v).UI(), i/6, i%6, 1, 1, 0, 0, false)
 		case SHIMOCHA:
-			kawa.Grid.AddItem(tile.Init(v).UI(), 5-i%6, i/6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(NewUITile(v).UI(), 5-i%6, i/6, 1, 1, 0, 0, false)
 		case TOIMEN:
-			kawa.Grid.AddItem(tile.Init(v).UI(), 3-i/6, 5-i%6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(NewUITile(v).UI(), 3-i/6, 5-i%6, 1, 1, 0, 0, false)
 		case KAMICHA:
-			kawa.Grid.AddItem(tile.Init(v).UI(), i%6, 3-i/6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(NewUITile(v).UI(), i%6, 3-i/6, 1, 1, 0, 0, false)
 		}
 	}
 }

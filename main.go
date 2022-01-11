@@ -5,8 +5,7 @@ import (
 	"github.com/rivo/tview"
 
 	"github.com/ebiyuu1121/mahjong-tui/game"
-	"github.com/ebiyuu1121/mahjong-tui/ui/kawaUI"
-	"github.com/ebiyuu1121/mahjong-tui/ui/pointIndicator"
+	"github.com/ebiyuu1121/mahjong-tui/ui"
 )
 
 const (
@@ -27,15 +26,44 @@ func main() {
 	}
 
 	// kawa
-	kawaUIList := [4]kawaUI.KawaUI{
-		JICHA:    kawaUI.Init(JICHA),
-		SHIMOCHA: kawaUI.Init(SHIMOCHA),
-		TOIMEN:   kawaUI.Init(TOIMEN),
-		KAMICHA:  kawaUI.Init(KAMICHA),
+	kawaUIList := [4]ui.KawaUI{
+		JICHA:    ui.NewKawaUI(JICHA),
+		SHIMOCHA: ui.NewKawaUI(SHIMOCHA),
+		TOIMEN:   ui.NewKawaUI(TOIMEN),
+		KAMICHA:  ui.NewKawaUI(KAMICHA),
 	}
 
-	// update kawa
+	activePie := 0
+	buttonFlex := tview.NewFlex()
+	for i := 0; i < 13; i++ {
+		buttonFlex.AddItem(buttons[i], 5, 1, false)
+	}
+
+	pointIndicator := ui.NewPointIndicator()
+
+	bottom := tview.NewFlex().
+		AddItem(tview.NewBox(), 0, 1, false).
+		AddItem(buttonFlex, 0, 1, false).
+		AddItem(buttons[13], 5, 1, false).
+		AddItem(tview.NewBox(), 0, 1, false)
+
+	kawa := tview.NewGrid().SetRows(0, 0, 0).SetColumns(0, 0, 0).
+		AddItem(kawaUIList[0].Grid, 2, 1, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[1].Grid, 1, 2, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[2].Grid, 0, 1, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[3].Grid, 1, 0, 1, 1, 0, 0, false).
+		AddItem(pointIndicator.UI(), 1, 1, 1, 1, 0, 0, false)
+
+	root := tview.NewFlex().SetDirection(tview.FlexRow).
+		AddItem(tview.NewBox(), 1, 1, false).
+		AddItem(kawa, 0, 9, false).
+		AddItem(bottom, 3, 1, false)
+
 	update := func() {
+		pointIndicator.
+			SetPoints(game.Point()).
+			SetDeckCount(game.YamaLength()).
+			SetRound(game.RoundWind(), game.RoundNumber())
 		for i := 0; i < 4; i++ {
 			kawaUIList[i].SetTiles(game.Kawa()[i])
 		}
@@ -72,35 +100,6 @@ func main() {
 		}
 	}
 	update()
-
-	activePie := 0
-	buttonFlex := tview.NewFlex()
-	for i := 0; i < 13; i++ {
-		buttonFlex.AddItem(buttons[i], 5, 1, false)
-	}
-
-	pointIndicator := pointIndicator.Init().
-		SetPoints(game.Point()).
-		SetRound(game.RoundWind(), game.RoundNumber())
-
-	bottom := tview.NewFlex().
-		AddItem(tview.NewBox(), 0, 1, false).
-		AddItem(buttonFlex, 0, 1, false).
-		AddItem(buttons[13], 5, 1, false).
-		AddItem(tview.NewBox(), 0, 1, false)
-
-	kawa := tview.NewGrid().SetRows(0, 0, 0).SetColumns(0, 0, 0).
-		AddItem(kawaUIList[0].Grid, 2, 1, 1, 1, 0, 0, false).
-		AddItem(kawaUIList[1].Grid, 1, 2, 1, 1, 0, 0, false).
-		AddItem(kawaUIList[2].Grid, 0, 1, 1, 1, 0, 0, false).
-		AddItem(kawaUIList[3].Grid, 1, 0, 1, 1, 0, 0, false).
-		AddItem(pointIndicator.UI(), 1, 1, 1, 1, 0, 0, false)
-
-	root := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(tview.NewBox(), 1, 1, false).
-		AddItem(kawa, 0, 9, false).
-		AddItem(bottom, 3, 1, false)
-
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyEnter:

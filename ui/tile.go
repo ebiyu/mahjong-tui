@@ -1,4 +1,4 @@
-package tile
+package ui
 
 import (
 	"github.com/gdamore/tcell/v2"
@@ -10,7 +10,7 @@ type UITile struct {
 	ui         *tview.TextView
 }
 
-func Init(tileString string) *UITile {
+func NewUITile(tileString string) *UITile {
 	tile := new(UITile)
 	tile.tileString = tileString
 	tile.ui = tview.NewTextView().
