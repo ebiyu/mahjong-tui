@@ -35,8 +35,20 @@ func Init() *Game {
 	return game
 }
 
+func (game *Game) Point() [4]int {
+	return game.point
+}
+
 func (game *Game) Tehai() [4][]string {
 	return game.tehai
+}
+
+func (game *Game) RoundWind() int {
+	return game.kyokuKaze
+}
+
+func (game *Game) RoundNumber() int {
+	return game.kyokuNum
 }
 
 func (game *Game) Kawa() [4][]string {

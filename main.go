@@ -6,6 +6,7 @@ import (
 
 	"github.com/ebiyuu1121/mahjong-tui/game"
 	"github.com/ebiyuu1121/mahjong-tui/ui/kawaUI"
+	"github.com/ebiyuu1121/mahjong-tui/ui/pointIndicator"
 )
 
 const (
@@ -78,25 +79,9 @@ func main() {
 		buttonFlex.AddItem(buttons[i], 5, 1, false)
 	}
 
-	pointIndicator := tview.NewGrid().
-		SetRows(0, 0, 0).
-		SetColumns(0, 0, 0).
-		AddItem(
-			tview.NewTextView().SetTextAlign(tview.AlignCenter).SetText("25000"),
-			0, 1, 1, 1, 0, 0, false).
-		AddItem(
-			tview.NewTextView().SetTextAlign(tview.AlignCenter).SetText("25000"),
-			1, 0, 1, 1, 0, 0, false).
-		AddItem(
-			tview.NewTextView().SetTextAlign(tview.AlignCenter).SetText("25000"),
-			1, 2, 1, 1, 0, 0, false).
-		AddItem(
-			tview.NewTextView().SetTextAlign(tview.AlignCenter).SetText("25000"),
-			2, 1, 1, 1, 0, 0, false).
-		AddItem(
-			tview.NewTextView().SetTextAlign(tview.AlignCenter).SetText("東2局"),
-			1, 1, 1, 1, 0, 0, false)
-	pointIndicator.SetBorder(true)
+	pointIndicator := pointIndicator.Init().
+		SetPoints(game.Point()).
+		SetRound(game.RoundWind(), game.RoundNumber())
 
 	bottom := tview.NewFlex().
 		AddItem(tview.NewBox(), 0, 1, false).
@@ -104,26 +89,14 @@ func main() {
 		AddItem(buttons[13], 5, 1, false).
 		AddItem(tview.NewBox(), 0, 1, false)
 
-	kawaRow := []tview.Primitive{
-		tview.NewFlex().
-			AddItem(tview.NewBox(), 0, 1, false).
-			AddItem(kawaUIList[TOIMEN].Grid, 0, 1, false).
-			AddItem(tview.NewBox(), 0, 1, false),
-		tview.NewFlex().
-			AddItem(kawaUIList[KAMICHA].Grid, 0, 1, false).
-			AddItem(pointIndicator, 0, 1, false).
-			AddItem(kawaUIList[SHIMOCHA].Grid, 0, 1, false),
-		tview.NewFlex().
-			AddItem(tview.NewBox(), 0, 1, false).
-			AddItem(kawaUIList[JICHA].Grid, 0, 1, false).
-			AddItem(tview.NewBox(), 0, 1, false),
-	}
-	kawa := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(kawaRow[0], 0, 1, false).
-		AddItem(kawaRow[1], 0, 1, false).
-		AddItem(kawaRow[2], 0, 1, false)
+	kawa := tview.NewGrid().SetRows(0, 0, 0).SetColumns(0, 0, 0).
+		AddItem(kawaUIList[0].Grid, 2, 1, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[1].Grid, 1, 2, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[2].Grid, 0, 1, 1, 1, 0, 0, false).
+		AddItem(kawaUIList[3].Grid, 1, 0, 1, 1, 0, 0, false).
+		AddItem(pointIndicator.UI(), 1, 1, 1, 1, 0, 0, false)
 
-	flex := tview.NewFlex().SetDirection(tview.FlexRow).
+	root := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(tview.NewBox(), 1, 1, false).
 		AddItem(kawa, 0, 9, false).
 		AddItem(bottom, 3, 1, false)
@@ -156,7 +129,7 @@ func main() {
 		return event
 	})
 
-	if err := app.SetRoot(flex, true).SetFocus(buttons[0]).EnableMouse(true).Run(); err != nil {
+	if err := app.SetRoot(root, true).SetFocus(buttons[0]).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}
 }
