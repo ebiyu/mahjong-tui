@@ -2,6 +2,8 @@ package kawaUI
 
 import (
 	"github.com/rivo/tview"
+
+	"github.com/ebiyuu1121/mahjong-tui/ui/tile"
 )
 
 const (
@@ -27,11 +29,9 @@ func Init(direction int) KawaUI {
 	return kawa
 }
 
-func (kawa KawaUI) Update(pies []string) {
+func (kawa KawaUI) SetTiles(pies []string) {
 	newSutehai := func(text string) tview.Primitive {
-		return tview.NewTextView().
-			SetTextAlign(tview.AlignCenter).
-			SetText(text)
+		return tile.Init(text).UI()
 	}
 
 	kawa.Grid.Clear()

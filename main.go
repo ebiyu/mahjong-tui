@@ -36,7 +36,7 @@ func main() {
 	// update kawa
 	update := func() {
 		for i := 0; i < 4; i++ {
-			kawaUIList[i].Update(game.Kawa()[i])
+			kawaUIList[i].SetTiles(game.Kawa()[i])
 		}
 		for i := 0; i < 14; i++ {
 			pai := game.Tehai()[JICHA][i]
@@ -50,7 +50,7 @@ func main() {
 			case "4z":
 				buttons[i].SetLabel("北")
 			case "5z":
-				buttons[i].SetLabel("")
+				buttons[i].SetLabel("白")
 			case "6z":
 				buttons[i].SetLabel("發")
 			case "7z":
@@ -65,6 +65,8 @@ func main() {
 				buttons[i].SetLabelColor(tcell.ColorLightCyan)
 			case 's':
 				buttons[i].SetLabelColor(tcell.ColorLightGreen)
+			default:
+				buttons[i].SetLabelColor(tcell.ColorWhite)
 			}
 		}
 	}
