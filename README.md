@@ -2,6 +2,8 @@
 
 mahjong app played in terminal
 
+![](/docs/screenshots/main.png)
+
 ## Installation
 
 ```sh
