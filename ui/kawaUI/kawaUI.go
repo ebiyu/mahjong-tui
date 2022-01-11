@@ -29,22 +29,18 @@ func Init(direction int) KawaUI {
 	return kawa
 }
 
-func (kawa KawaUI) SetTiles(pies []string) {
-	newSutehai := func(text string) tview.Primitive {
-		return tile.Init(text).UI()
-	}
-
+func (kawa KawaUI) SetTiles(tiles []string) {
 	kawa.Grid.Clear()
-	for i, v := range pies {
+	for i, v := range tiles {
 		switch kawa.direction {
 		case JICHA:
-			kawa.Grid.AddItem(newSutehai(v), i/6, i%6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(tile.Init(v).UI(), i/6, i%6, 1, 1, 0, 0, false)
 		case SHIMOCHA:
-			kawa.Grid.AddItem(newSutehai(v), 5-i%6, i/6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(tile.Init(v).UI(), 5-i%6, i/6, 1, 1, 0, 0, false)
 		case TOIMEN:
-			kawa.Grid.AddItem(newSutehai(v), 3-i/6, 5-i%6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(tile.Init(v).UI(), 3-i/6, 5-i%6, 1, 1, 0, 0, false)
 		case KAMICHA:
-			kawa.Grid.AddItem(newSutehai(v), i%6, 3-i/6, 1, 1, 0, 0, false)
+			kawa.Grid.AddItem(tile.Init(v).UI(), i%6, 3-i/6, 1, 1, 0, 0, false)
 		}
 	}
 }
