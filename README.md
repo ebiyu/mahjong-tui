@@ -28,9 +28,7 @@ This app is under development
 ## Installation
 
 ```sh
-git clone https://github.com/ebiyuu1121/mahjong-tui
-cd mahjong-tui
-go install
+go install github.com/ebiyuu1121/mahjong-tui@latest
 ```
 
 ## run
